@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 // Serve all static files from the public folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Explicit routes for every schema graph ID in your HTML
+// Explicit routes for every schema graph ID so they resolve correctly on Render
 app.get('/faq', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -30,5 +30,5 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Bridgeserver4 active on port ${PORT}`);
+    console.log(`🚀 Bridgeserver4 active on port ${PORT}`);
 });
