@@ -1,0 +1,12 @@
+{
+  "name": "steam-lua-generator",
+  "version": "1.0.0",
+  "description": "Clean Steam AppID Lua Generator Node.js Web Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
