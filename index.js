@@ -30,5 +30,5 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 Bridgeserver4 active on port ${PORT}`);
+    console.log(`Steam Lua Generator running on port ${PORT}`);
 });
