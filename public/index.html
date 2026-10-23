@@ -233,6 +233,46 @@
         position: relative; z-index: 10; transition: transform 0.1s linear, border-color 0.4s var(--ease);
     }
 
+    /* Visible content card style for dynamic sub-pages */
+    .card.info-card {
+        width: 500px;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    .card.info-card h3 {
+        color: var(--accent);
+        font-size: 14px;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+    .card.info-card p, .card.info-card li {
+        font-size: 13px;
+        color: #abb2bf;
+        line-height: 1.6;
+        margin-bottom: 12px;
+        font-family: 'JetBrains Mono', monospace;
+    }
+    .card.info-card ul {
+        padding-left: 20px;
+        margin-bottom: 15px;
+    }
+    .back-btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: var(--accent);
+        color: #fff;
+        text-decoration: none;
+        font-size: 10px;
+        font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border-radius: 2px;
+        transition: opacity 0.2s;
+    }
+    .back-btn:hover { opacity: 0.8; }
+
     header h2 {
         font-weight: 900; font-size: 12px; letter-spacing: 6px; text-transform: uppercase;
         color: var(--text-dim); margin-bottom: 30px; display: flex; align-items: center; gap: 10px;
@@ -423,6 +463,58 @@
 </section>
 
 <script>
+// Dynamic path router to render visible content based on the URL path (/faq, /app, /website, /breadcrumb)
+window.addEventListener('DOMContentLoaded', () => {
+    const path = window.location.pathname;
+    const card = document.getElementById('mainCard');
+    if (!card) return;
+
+    if (path === '/faq') {
+        card.className = 'card info-card';
+        card.innerHTML = `
+            <header><h2>Protocol FAQ</h2></header>
+            <h3>What does the Steam AppID Lua Generator do?</h3>
+            <p>It turns a numeric Steam AppID into a downloadable Lua configuration file and shows a Steam game preview when metadata is available.</p>
+            <h3>Do I need to install software to use it?</h3>
+            <p>No. The generator runs in the browser as a single-page web tool and exports the Lua file locally.</p>
+            <h3>Can I open the matching SteamDB page?</h3>
+            <p>Yes. After entering an AppID, the SteamDB shortcut updates to the corresponding SteamDB app page.</p>
+            <a href="/" class="back-btn">← Back to Generator</a>
+        `;
+    } else if (path === '/app') {
+        card.className = 'card info-card';
+        card.innerHTML = `
+            <header><h2>Software Application</h2></header>
+            <h3>Steam AppID Lua Generator</h3>
+            <p><strong>Description:</strong> A browser-based utility that accepts a Steam AppID, previews Steam game metadata, and exports a local Lua configuration file.</p>
+            <p><strong>Category:</strong> DeveloperApplication</p>
+            <p><strong>Operating System:</strong> Windows, Linux, macOS</p>
+            <p><strong>Price:</strong> Free (0 USD)</p>
+            <a href="/" class="back-btn">← Back to Generator</a>
+        `;
+    } else if (path === '/website') {
+        card.className = 'card info-card';
+        card.innerHTML = `
+            <header><h2>WebSite Protocol</h2></header>
+            <h3>Steam AppID Lua Generator Portal</h3>
+            <p>Single-page Steam AppID lookup and Lua config generator active on authoritative CDN nodes.</p>
+            <p><strong>Language:</strong> English (en-US)</p>
+            <a href="/" class="back-btn">← Back to Generator</a>
+        `;
+    } else if (path === '/breadcrumb') {
+        card.className = 'card info-card';
+        card.innerHTML = `
+            <header><h2>Breadcrumb Navigator</h2></header>
+            <h3>Navigation Trail</h3>
+            <ul>
+                <li>Position 1: Home (/)</li>
+                <li>Position 2: Steam AppID Lua Generator (/)</li>
+            </ul>
+            <a href="/" class="back-btn">← Back to Generator</a>
+        `;
+    }
+});
+
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursor-ring');
 let mouse = { x: -100, y: -100 };
@@ -802,26 +894,28 @@ function setThunderButtonState(className, label) {
     dlBtn.innerHTML = `<span>${label}</span><span>→</span>`;
 }
 
-input.addEventListener('input', () => {
-    const val = input.value.trim();
-    
-    if (val.length > 1 && /^\d+$/.test(val)) {
-        currentId = val;
-        hud.classList.add('active');
-        dlBtn.disabled = false;
-        gName.innerText = "APPID_" + val;
-        gStatus.innerText = "LOCAL_CACHE_HIT";
-        gThumb.src = `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${val}/header.jpg`;
-        gThumb.style.display = "block";
-        document.getElementById('steamDbBtn').href = `https://www.steamdb.info/app/${val}/`;
-        fetchName(val);
-    } else {
-        hud.classList.remove('active');
-        dlBtn.disabled = true;
-        currentId = null;
-        document.getElementById('steamDbBtn').href = 'https://www.steamdb.info/';
-    }
-});
+if (input) {
+    input.addEventListener('input', () => {
+        const val = input.value.trim();
+        
+        if (val.length > 1 && /^\d+$/.test(val)) {
+            currentId = val;
+            hud.classList.add('active');
+            dlBtn.disabled = false;
+            gName.innerText = "APPID_" + val;
+            gStatus.innerText = "LOCAL_CACHE_HIT";
+            gThumb.src = `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${val}/header.jpg`;
+            gThumb.style.display = "block";
+            document.getElementById('steamDbBtn').href = `https://www.steamdb.info/app/${val}/`;
+            fetchName(val);
+        } else {
+            hud.classList.remove('active');
+            dlBtn.disabled = true;
+            currentId = null;
+            document.getElementById('steamDbBtn').href = 'https://www.steamdb.info/';
+        }
+    });
+}
 
 async function fetchName(id) {
     try {
@@ -908,7 +1002,9 @@ setManifestid(${depotId}, "${manifestId}", 0)`;
     }
 }
 
-document.getElementById('dlBtn').addEventListener('click', executeDownload);
+if (dlBtn) {
+    dlBtn.addEventListener('click', executeDownload);
+}
 
 window.addEventListener('mousemove', (e) => {
     tiltX = (window.innerWidth / 2 - e.clientX) / 35;
@@ -926,7 +1022,9 @@ function spatialMatrixEngine() {
         if (shakeIntensity < 0.05) shakeIntensity = 0;
     }
 
-    card.style.transform = `rotateY(${tiltX + currentShakeX}deg) rotateX(${-tiltY + currentShakeY}deg) scale(${1 + (shakeIntensity * 0.0015)})`;
+    if (card) {
+        card.style.transform = `rotateY(${tiltX + currentShakeX}deg) rotateX(${-tiltY + currentShakeY}deg) scale(${1 + (shakeIntensity * 0.0015)})`;
+    }
     requestAnimationFrame(spatialMatrixEngine);
 }
 requestAnimationFrame(spatialMatrixEngine);
@@ -941,6 +1039,7 @@ requestAnimationFrame(backgroundCoreMoteAnimation);
 
 (function(){
     const scvs = document.getElementById('starsCanvas');
+    if (!scvs) return;
     const sctx = scvs.getContext('2d');
     let stars = [];
 
