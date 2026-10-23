@@ -205,13 +205,18 @@
     .ticker {
         height: 30px; background: #000; border-bottom: 1px solid var(--border);
         display: flex; align-items: center; font-family: 'JetBrains Mono', monospace;
-        font-size: 10px; letter-spacing: 1px; color: var(--text-dim); overflow: hidden;
+        font-size: 10px; letter-spacing: 1px; color: var(--text); overflow: hidden;
+        position: relative;
     }
     .ticker-content {
-        display: flex; white-space: nowrap; animation: ticker 30s linear infinite;
+        display: inline-block;
+        white-space: nowrap;
+        position: absolute;
+        will-change: transform;
+        animation: singleTicker 22s linear infinite;
     }
-    @keyframes ticker {
-        0% { transform: translateX(0); }
+    @keyframes singleTicker {
+        0% { transform: translateX(100vw); }
         100% { transform: translateX(-100%); }
     }
 
