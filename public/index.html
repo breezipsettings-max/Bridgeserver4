@@ -342,11 +342,19 @@
         transform: scale(1.05);
     }
 
-    .steamdb-btn {
+    /* Right-side vertical navigation stack */
+    .nav-stack {
         position: fixed;
         top: 58px;
         right: 42px;
         z-index: 6;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-end;
+    }
+
+    .steamdb-btn {
         display: inline-flex;
         align-items: center;
         gap: 9px;
@@ -359,6 +367,8 @@
         font-size: 9px;
         letter-spacing: 2.5px;
         text-transform: uppercase;
+        width: 145px;
+        justify-content: flex-start;
         transition: border-color 0.22s var(--ease), color 0.22s var(--ease), box-shadow 0.22s var(--ease), background 0.22s var(--ease);
     }
     .steamdb-btn:hover {
@@ -419,10 +429,29 @@
     <div class="nebula-band nebula-band-2"></div>
 </div>
 
-<a id="steamDbBtn" href="https://www.steamdb.info/" target="_blank" rel="noopener" class="steamdb-btn">
-    <span class="sdb-pulse"></span>
-    <span>SteamDB</span>
-</a>
+<!-- Vertical right-side button stack (SteamDB stays at the top of the list) -->
+<div class="nav-stack">
+    <a id="steamDbBtn" href="https://www.steamdb.info/" target="_blank" rel="noopener" class="steamdb-btn">
+        <span class="sdb-pulse"></span>
+        <span>SteamDB</span>
+    </a>
+    <a href="/faq" class="steamdb-btn">
+        <span class="sdb-pulse"></span>
+        <span>FAQ Protocol</span>
+    </a>
+    <a href="/app" class="steamdb-btn">
+        <span class="sdb-pulse"></span>
+        <span>App Spec</span>
+    </a>
+    <a href="/website" class="steamdb-btn">
+        <span class="sdb-pulse"></span>
+        <span>Website Info</span>
+    </a>
+    <a href="/breadcrumb" class="steamdb-btn">
+        <span class="sdb-pulse"></span>
+        <span>Breadcrumbs</span>
+    </a>
+</div>
 
 <nav class="ticker">
     <div class="ticker-content">
