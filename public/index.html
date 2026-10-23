@@ -209,8 +209,15 @@
         position: relative;
     }
     .ticker-content {
-        display: inline-block; white-space: nowrap; will-change: transform;
-        position: absolute; left: 0;
+        display: inline-block;
+        white-space: nowrap;
+        position: absolute;
+        will-change: transform;
+        animation: singleTicker 22s linear infinite;
+    }
+    @keyframes singleTicker {
+        0% { transform: translateX(100vw); }
+        100% { transform: translateX(-100%); }
     }
 
     .container {
@@ -452,7 +459,7 @@
 </div>
 
 <nav class="ticker">
-    <div class="ticker-content" id="tickerContent">
+    <div class="ticker-content">
         &nbsp; [SYSTEM_ONLINE] &nbsp; • &nbsp; CDN_HOTLINK: ENABLED &nbsp; • &nbsp; REALTIME_SYNC: ACTIVE &nbsp; • &nbsp; STATUS: AUTHORITATIVE &nbsp; • &nbsp;
     </div>
 </nav>
@@ -541,22 +548,6 @@ window.addEventListener('DOMContentLoaded', () => {
         `;
     }
 });
-
-// Single-string ticker loop (no duplicates, enters from right, exits left, loops back)
-const tickerEl = document.getElementById('tickerContent');
-if (tickerEl) {
-    let tickerPos = window.innerWidth;
-    const tickerSpeed = 1.2;
-    function runTickerLoop() {
-        tickerPos -= tickerSpeed;
-        if (tickerPos < -tickerEl.offsetWidth) {
-            tickerPos = window.innerWidth;
-        }
-        tickerEl.style.transform = `translateX(${tickerPos}px)`;
-        requestAnimationFrame(runTickerLoop);
-    }
-    requestAnimationFrame(runTickerLoop);
-}
 
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursor-ring');
