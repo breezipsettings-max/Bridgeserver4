@@ -4,14 +4,31 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve all static files from the 'public' folder
+// Serve all static files from the public folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Catch-all route to send index.html for SPA routing
+// Explicit routes for every schema graph ID in your HTML
+app.get('/faq', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/app', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/website', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/breadcrumb', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Catch-all route for SPA routing
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 Bridgeserver4 active on port ${PORT}`);
+    console.log(`Bridgeserver4 active on port ${PORT}`);
 });
