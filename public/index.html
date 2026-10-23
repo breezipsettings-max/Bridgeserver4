@@ -1,1 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Steam AppID Lua Generator | SteamTools Helper</title>
+<meta name="google-site-verification" content="H5VxEGD785KDLpVVjR7l3ORyS9Obix08WUj7eoW9LZs">
+<meta name="description" content="Generate SteamTools Lua config files from a Steam AppID. Steam header preview, and local .lua export.">
+<meta name="keywords" content="Steam AppID Lua generator, SteamTools Lua generator, Steam manifest generator, SteamDB AppID lookup, Steam config generator, appmanifest helper, Lua config download, Steam depot manifest tool">
+<meta name="author" content="manifest lua generator">
+<meta name="publisher" content="manifest lua generator">
+<meta name="application-name" content="steam tools lua generator">
+<meta name="theme-color" content="#050608">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="format-detection" content="telephone=no">
+
+<link rel="canonical" href="https://ramzeez.com/">
+<link rel="alternate" hreflang="en" href="https://ramzeez.com/">
+<link rel="alternate" hreflang="x-default" href="https://ramzeez.com/">
+
+<link rel="icon" type="image/x-icon" href="/Lua_Brackets.ico">
+<link rel="apple-touch-icon" href="/Lua_Brackets.ico">
+
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:site_name" content="SteamTools Shadow Protocol">
+<meta property="og:title" content="Steam AppID Lua Generator - SteamTools Config Helper">
+<meta property="og:description" content="Enter a Steam AppID, preview Steam game metadata, open SteamDB, and export a local SteamTools-style Lua config file from one fast web page.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ramzeez.com/">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Steam AppID Lua Generator">
+<meta name="twitter:description" content="Fast Steam AppID lookup and local SteamTools Lua config export in a single-page utility.">
+
+<!-- Microsoft Clarity Connected Tracking Link Kept -->
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "yn4akradt0");
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://ramzeez.com/#website",
+      "url": "https://ramzeez.com/",
+      "name": "Steam AppID Lua Generator",
+      "description": "Single-page Steam AppID lookup and Lua config generator.",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://ramzeez.com/#app",
+      "name": "Steam AppID Lua Generator",
+      "url": "https://ramzeez.com/",
+      "description": "A browser-based utility that accepts a Steam AppID, previews Steam game metadata, and exports a local Lua configuration file.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Windows, Linux, macOS",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://ramzeez.com/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What does the Steam AppID Lua Generator do?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It turns a numeric Steam AppID into a downloadable Lua configuration file and shows a Steam game preview when metadata is available."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to install software to use it?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The generator runs in the browser as a single-page web tool and exports the Lua file locally."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I open the matching SteamDB page?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. After entering an AppID, the SteamDB shortcut updates to the corresponding SteamDB app page."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://ramzeez.com/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://ramzeez.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Steam AppID Lua Generator",
+          "item": "https://ramzeez.com/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --bg: #050608;
+        --card: #0c0e12;
+        --accent: #ff5500; 
+        --accent-glow: rgba(255, 85, 0, 0.3);
+        --text: #ffffff;
+        --text-dim: #5c6370;
+        --border: rgba(255, 255, 255, 0.05);
+        --ease: cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; cursor: none; }
+    
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Inter', sans-serif;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        user-select: none;
+        cursor: none;
+        transition: filter 0.4s var(--ease);
+    }
+
+    #starsCanvas {
+        position: fixed;
+        inset: 0;
+        z-index: -3;
+        pointer-events: none;
+    }
+    .nebula-wrap {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        pointer-events: none;
+        overflow: hidden;
+    }
+    .nebula-band {
+        position: absolute;
+        top: -80%;
+        left: -20%;
+        width: 140%;
+        height: 260%;
+        transform: rotate(-30deg);
+        transform-origin: center center;
+    }
+    .nebula-band-1 {
+        background:
+            radial-gradient(ellipse 160px 800px at 50% 40%, rgba(78, 88, 115, 0.11) 0%, transparent 65%),
+            radial-gradient(ellipse 80px 520px at 54% 55%, rgba(100, 112, 140, 0.08) 0%, transparent 58%),
+            radial-gradient(ellipse 240px 1100px at 48% 65%, rgba(55, 65, 88, 0.06) 0%, transparent 72%);
+    }
+    .nebula-band-2 {
+        background:
+            radial-gradient(ellipse 28px 180px at 50% 32%, rgba(160, 170, 195, 0.04) 0%, transparent 48%),
+            radial-gradient(ellipse 450px 1500px at 50% 50%, rgba(35, 40, 58, 0.05) 0%, transparent 82%),
+            radial-gradient(ellipse 50px 300px at 46% 72%, rgba(120, 130, 155, 0.04) 0%, transparent 50%);
+    }
+
+    .seo-content {
+        position: absolute;
+        width: 1px; height: 1px; padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;
+    }
+
+    #cursor {
+        position: fixed; width: 10px; height: 10px; background: var(--accent);
+        border-radius: 50%; pointer-events: none; z-index: 9999; 
+        top: 0; left: 0; transform: translate3d(-50%, -50%, 0); will-change: transform;
+    }
+    #cursor-ring {
+        position: fixed; width: 30px; height: 30px; border: 1px solid var(--accent);
+        border-radius: 50%; pointer-events: none; z-index: 9998; 
+        top: 0; left: 0; transform: translate3d(-50%, -50%, 0); will-change: transform;
+    }
+
+    .ticker {
+        height: 30px; background: #000; border-bottom: 1px solid var(--border);
+        display: flex; align-items: center; font-family: 'JetBrains Mono', monospace;
+        font-size: 10px; letter-spacing: 1px; color: var(--text-dim); overflow: hidden;
+    }
+    .ticker-content {
+        display: flex; white-space: nowrap; animation: ticker 30s linear infinite;
+    }
+    @keyframes ticker {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+
+    .container {
+        flex: 1; display: flex; align-items: center; justify-content: center;
+        position: relative; perspective: 1000px;
+    }
+
+    .bg-lines {
+        position: absolute; inset: 0;
+        background: linear-gradient(90deg, transparent 49.5%, rgba(255,255,255,0.02) 50%, transparent 50.5%);
+        background-size: 10% 100%; z-index: -1;
+        mask-image: radial-gradient(circle, black, transparent 80%);
+    }
+
+    .card {
+        width: 380px; background: var(--card); border: 1px solid var(--border);
+        padding: 40px; border-radius: 4px; box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+        position: relative; z-index: 10; transition: transform 0.1s linear, border-color 0.4s var(--ease);
+    }
+
+    header h2 {
+        font-weight: 900; font-size: 12px; letter-spacing: 6px; text-transform: uppercase;
+        color: var(--text-dim); margin-bottom: 30px; display: flex; align-items: center; gap: 10px;
+    }
+    header h2::before { content:''; width: 20px; height: 1px; background: var(--accent); }
+
+    .input-field {
+        background: #000; border: 1px solid var(--border); padding: 20px;
+        width: 100%; color: var(--accent); font-family: 'JetBrains Mono', monospace;
+        font-size: 24px; outline: none; margin-bottom: 20px;
+    }
+    .input-field:focus { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
+
+    #gameHud {
+        height: 0; opacity: 0; overflow: hidden; transition: all 0.3s var(--ease);
+        border-left: 2px solid var(--accent); padding-left: 0;
+    }
+    #gameHud.active { height: 260px; opacity: 1; padding-left: 20px; margin-bottom: 30px; }
+    .hud-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 5px; }
+    .hud-value { font-weight: 700; font-size: 16px; letter-spacing: -0.5px; line-height: 1.2; }
+
+    #gThumb { width: 100%; height: 160px; object-fit: cover; border-radius: 2px; margin-bottom: 15px; background: #000; opacity: 0.8; border: 1px solid var(--border); }
+
+    .btn {
+        width: 100%; background: var(--text); color: #000; border: none; padding: 20px;
+        font-weight: 900; text-transform: uppercase; font-size: 12px; letter-spacing: 2px;
+        transition: all 0.2s; display: flex; justify-content: space-between; align-items: center;
+    }
+    .btn:disabled { opacity: 0.1; }
+    .btn:not(:disabled):hover { background: var(--accent); color: white; transform: scale(1.02); }
+
+    #achievement {
+        position: fixed; bottom: 30px; right: 30px; background: #1a1d24; border: 1px solid #3d4450;
+        padding: 15px 25px; display: flex; align-items: center; gap: 15px;
+        transform: translateX(120%); transition: transform 0.6s var(--ease); z-index: 1000;
+    }
+    #achievement.show { transform: translateX(0); }
+    .ach-icon { width: 40px; height: 40px; background: var(--accent); border-radius: 4px; display: grid; place-items: center; font-weight: 900; color: white; }
+
+    #cinemaCanvas {
+        position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9996; mix-blend-mode: screen;
+    }
+    #filmFlash {
+        position: fixed; inset: 0; background: #ffffff; opacity: 0; pointer-events: none; z-index: 10000;
+    }
+    
+    .cinema-bar {
+        position: fixed; left: 0; width: 100%; height: 0vh; background: #000000; z-index: 9995;
+        transition: height 0.8s cubic-bezier(0.25, 1, 0.3, 1);
+    }
+    .cinema-bar-top { top: 0; border-bottom: 1px solid rgba(255,255,255,0.02); }
+    .cinema-bar-bottom { bottom: 0; border-top: 1px solid rgba(255,255,255,0.02); }
+    
+    body.cinematic-active .cinema-bar { height: 11vh; }
+    body.cinematic-active { filter: contrast(1.12) brightness(0.85); }
+    body.cinematic-impact { filter: contrast(1.4) brightness(1.5) saturate(1.2); }
+
+    .btn.cine-build {
+        background: #0d1117 !important; color: #52647d !important;
+        border: 1px solid rgba(0, 150, 255, 0.3) !important;
+        box-shadow: 0 0 25px rgba(0, 110, 255, 0.15);
+        letter-spacing: 5px; font-weight: 700;
+    }
+    .btn.cine-flash-impact {
+        background: #ffffff !important; color: #000000 !important;
+        box-shadow: 0 0 100px #ffffff, 0 0 200px rgba(0, 150, 255, 0.6);
+        transform: scale(1.05);
+    }
+
+    .steamdb-btn {
+        position: fixed;
+        top: 58px;
+        right: 42px;
+        z-index: 6;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 9px 16px 9px 12px;
+        background: rgba(5, 6, 8, 0.55);
+        border: 1px solid white;
+        color: var(--text-dim);
+        text-decoration: none;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        transition: border-color 0.22s var(--ease), color 0.22s var(--ease), box-shadow 0.22s var(--ease), background 0.22s var(--ease);
+    }
+    .steamdb-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: rgba(255, 85, 0, 0.06);
+        box-shadow: 0 0 18px var(--accent-glow);
+    }
+    .steamdb-btn .sdb-pulse {
+        width: 5px; height: 5px; border-radius: 50%;
+        background: var(--text-dim);
+        transition: background 0.22s, box-shadow 0.22s;
+        flex-shrink: 0;
+    }
+    .steamdb-btn:hover .sdb-pulse {
+        background: var(--accent);
+        box-shadow: 0 0 7px var(--accent);
+    }
+    
+    .social-links { margin-top: 40px; display: flex; gap: 20px; justify-content: center; }
+    .social-links a { color: var(--text-dim); text-decoration: none; font-size: 11px; border: 1px solid var(--border); padding: 10px 20px; border-radius: 4px; }
+    .social-links a:hover { border-color: var(--accent); color: var(--accent); }
+    
+    @media (max-width: 1024px) {
+        #cursor, #cursor-ring { display: none !important; }
+        body { cursor: auto !important; }
+    }
+</style>
+</head>
+<body>
+
+<main class="seo-content" aria-label="Steam AppID Lua generator summary">
+    <h1>Steam AppID Lua Generator</h1>
+    <p>SteamTools Shadow Protocol is a browser-based AppID helper that generates a local Lua configuration file from a numeric Steam AppID[cite: 1].</p>
+    <p>The page supports Steam game header previews, direct SteamDB app lookup, and a fast local export workflow for users who need a SteamTools-style config helper[cite: 1].</p>
+    <section aria-label="Common questions">
+        <h2>Steam AppID Lua Generator FAQ</h2>
+        <h3>What is a Steam AppID?</h3>
+        <p>A Steam AppID is the numeric identifier used by Steam to reference a game, tool, demo, or application[cite: 1].</p>
+        <h3>What file does this tool export?</h3>
+        <p>The tool exports a local .lua configuration file based on the AppID entered in the input field[cite: 1].</p>
+        <h3>Does this page link to SteamDB?</h3>
+        <p>Yes. The SteamDB button updates to the matching app page when a valid AppID is entered[cite: 1].</p>
+    </section>
+</main>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<div class="cinema-bar cinema-bar-top"></div>
+<div class="cinema-bar cinema-bar-bottom"></div>
+<div id="filmFlash"></div>
+<canvas id="cinemaCanvas"></canvas>
+<canvas id="starsCanvas"></canvas>
+
+<div class="nebula-wrap">
+    <div class="nebula-band nebula-band-1"></div>
+    <div class="nebula-band nebula-band-2"></div>
+</div>
+
+<a id="steamDbBtn" href="https://www.steamdb.info/" target="_blank" rel="noopener" class="steamdb-btn">
+    <span class="sdb-pulse"></span>
+    <span>SteamDB</span>
+</a>
+
+<nav class="ticker">
+    <div class="ticker-content">
+        &nbsp; [SYSTEM_ONLINE] &nbsp; • &nbsp; CDN_HOTLINK: ENABLED &nbsp; • &nbsp; REALTIME_SYNC: ACTIVE &nbsp; • &nbsp; STATUS: AUTHORITATIVE &nbsp; • &nbsp;
+    </div>
+</nav>
+
+<div class="container">
+    <div class="bg-lines"></div>
+    <article class="card" id="mainCard">
+        <header><h2>Lua_Generator</h2></header>
+        <input type="number" class="input-field" id="appId" placeholder="APP_ID" autocomplete="off">
+        <div id="gameHud">
+            <img id="gThumb" src="" alt="Thumbnail" style="display:none">
+            <div class="hud-label">Protocol_Detected</div>
+            <div class="hud-value" id="gName">SCANNING...</div>
+            <div class="hud-value" style="font-size:10px; color:var(--accent); margin-top:4px" id="gStatus">LOCAL_SYNC</div>
+        </div>
+        <button class="btn" id="dlBtn" disabled>
+            <span>Generate Config</span><span>→</span>
+        </button>
+    </article>
+</div>
+
+<div id="achievement">
+    <div class="ach-icon">!</div>
+    <div class="ach-text">
+        <div style="color:var(--accent); font-size:10px; font-weight:800; text-transform:uppercase;">Achievement Unlocked</div>
+        <div style="font-weight:600; font-size:14px;">Config Master</div>
+    </div>
+</div>
+
+<section>
+    <div class="social-links" style="margin-top: 30px; margin-bottom: 30px;">
+        <a href="https://twitter.com/" target="_blank">Share on Twitter</a>
+        <a href="https://facebook.com/" target="_blank">Share on Facebook</a>
+    </div>
+</section>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mouse = { x: -100, y: -100 };
+let dotPos = { x: -100, y: -100 };
+let ringPos = { x: -100, y: -100 };
+
+document.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+});
+
+function animatePointer() {
+    dotPos.x += (mouse.x - dotPos.x) * 0.4;
+    dotPos.y += (mouse.y - dotPos.y) * 0.4;
+    ringPos.x += (mouse.x - ringPos.x) * 0.15;
+    ringPos.y += (mouse.y - ringPos.y) * 0.15;
+    
+    cursor.style.transform = `translate3d(${dotPos.x}px, ${dotPos.y}px, 0) translate(-50%, -50%)`;
+    ring.style.transform = `translate3d(${ringPos.x}px, ${ringPos.y}px, 0) translate(-50%, -50%)`;
+    
+    requestAnimationFrame(animatePointer);
+}
+animatePointer();
+
+const input = document.getElementById('appId');
+const hud = document.getElementById('gameHud');
+const dlBtn = document.getElementById('dlBtn');
+const card = document.getElementById('mainCard');
+const gName = document.getElementById('gName');
+const gStatus = document.getElementById('gStatus');
+const gThumb = document.getElementById('gThumb');
+
+let currentId = null;
+let currentName = "GAME_CONFIG";
+let cinematicEffectActive = false;
+
+let tiltX = 0, tiltY = 0;
+let shakeIntensity = 0;
+
+let audioCtx = null;
+let riserNodes = []; 
+
+function getAudioContext() {
+    if (audioCtx) return audioCtx;
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return null;
+    audioCtx = new AudioContextClass();
+    return audioCtx;
+}
+
+function makeDistortionCurve(amount) {
+    let k = typeof amount === 'number' ? amount : 50,
+        n_samples = 44100,
+        curve = new Float32Array(n_samples),
+        deg = Math.PI / 180,
+        i = 0,
+        x;
+    for ( ; i < n_samples; ++i ) {
+        x = i * 2 / n_samples - 1;
+        curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
+    }
+    return curve;
+}
+
+function createStadiumReverb(ctx) {
+    let length = ctx.sampleRate * 3.0;
+    let impulse = ctx.createBuffer(2, length, ctx.sampleRate);
+    let left = impulse.getChannelData(0);
+    let right = impulse.getChannelData(1);
+    for (let i = 0; i < length; i++) {
+        let decay = Math.exp(-i / (ctx.sampleRate * 0.8));
+        left[i] = (Math.random() * 2 - 1) * decay;
+        right[i] = (Math.random() * 2 - 1) * decay;
+    }
+    let convolver = ctx.createConvolver();
+    convolver.buffer = impulse;
+    return convolver;
+}
+
+function triggerCinematicRiser() {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') ctx.resume();
+    
+    riserNodes = [];
+    const now = ctx.currentTime;
+    const duration = 1.4;
+
+    const dist = ctx.createWaveShaper();
+    dist.curve = makeDistortionCurve(40);
+    dist.oversample = '4x';
+
+    const subOsc = ctx.createOscillator();
+    const subGain = ctx.createGain();
+    subOsc.type = 'sawtooth';
+    subOsc.frequency.setValueAtTime(30, now);
+    subOsc.frequency.exponentialRampToValueAtTime(120, now + duration);
+    
+    subGain.gain.setValueAtTime(0.001, now);
+    subGain.gain.linearRampToValueAtTime(0.4, now + duration);
+
+    subOsc.connect(dist);
+    dist.connect(subGain);
+    subGain.connect(ctx.destination);
+    subOsc.start(now);
+    riserNodes.push({osc: subOsc, gain: subGain});
+
+    const highOsc = ctx.createOscillator();
+    const highGain = ctx.createGain();
+    highOsc.type = 'sine';
+    highOsc.frequency.setValueAtTime(400, now);
+    highOsc.frequency.exponentialRampToValueAtTime(4000, now + duration);
+    
+    highGain.gain.setValueAtTime(0.001, now);
+    highGain.gain.linearRampToValueAtTime(0.15, now + duration);
+    
+    highOsc.connect(highGain);
+    highGain.connect(ctx.destination);
+    highOsc.start(now);
+    riserNodes.push({osc: highOsc, gain: highGain});
+}
+
+function cutCinematicRiser() {
+    const ctx = audioCtx;
+    if (!ctx) return;
+    const now = ctx.currentTime;
+
+    riserNodes.forEach(node => {
+        try {
+            node.gain.gain.setValueAtTime(node.gain.gain.value, now);
+            node.gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+            setTimeout(() => { try { node.osc.stop(); } catch(e){} }, 60);
+        } catch (e) {}
+    });
+    riserNodes = [];
+}
+
+function playCinematicBraamBlast() {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+
+    const compressor = ctx.createDynamicsCompressor();
+    compressor.threshold.setValueAtTime(-10, now);
+    compressor.knee.setValueAtTime(10, now);
+    compressor.ratio.setValueAtTime(15, now);
+    compressor.attack.setValueAtTime(0.002, now);
+    compressor.release.setValueAtTime(0.2, now);
+    compressor.connect(ctx.destination);
+
+    const reverb = createStadiumReverb(ctx);
+    const reverbGain = ctx.createGain();
+    reverbGain.gain.value = 0.6; 
+    reverb.connect(reverbGain);
+    reverbGain.connect(compressor);
+
+    const distortion = ctx.createWaveShaper();
+    distortion.curve = makeDistortionCurve(100); 
+    distortion.oversample = '4x';
+    distortion.connect(compressor);
+    distortion.connect(reverb); 
+
+    const metalStrikeOsc = ctx.createOscillator();
+    const modulatorOsc = ctx.createOscillator();
+    const modGain = ctx.createGain();
+    const strikeGain = ctx.createGain();
+
+    metalStrikeOsc.type = 'square';
+    metalStrikeOsc.frequency.setValueAtTime(120, now);
+    
+    modulatorOsc.type = 'sine';
+    modulatorOsc.frequency.setValueAtTime(600, now);
+    modulatorOsc.frequency.exponentialRampToValueAtTime(50, now + 0.2);
+    
+    modGain.gain.setValueAtTime(2000, now);
+    modGain.gain.exponentialRampToValueAtTime(10, now + 0.2);
+
+    modulatorOsc.connect(modGain);
+    modGain.connect(metalStrikeOsc.frequency); 
+
+    strikeGain.gain.setValueAtTime(1, now);
+    strikeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+    metalStrikeOsc.connect(strikeGain);
+    strikeGain.connect(distortion);
+
+    modulatorOsc.start(now);
+    metalStrikeOsc.start(now);
+    modulatorOsc.stop(now + 0.3);
+    metalStrikeOsc.stop(now + 0.3);
+
+    const subOsc = ctx.createOscillator();
+    const subGain = ctx.createGain();
+    subOsc.type = 'sine';
+    subOsc.frequency.setValueAtTime(60, now);
+    subOsc.frequency.exponentialRampToValueAtTime(20, now + 2.5); 
+
+    subGain.gain.setValueAtTime(1.5, now);
+    subGain.gain.exponentialRampToValueAtTime(0.001, now + 2.5);
+
+    subOsc.connect(subGain);
+    subGain.connect(compressor);
+    subOsc.start(now);
+    subOsc.stop(now + 2.5);
+
+    const braamFilter = ctx.createBiquadFilter();
+    braamFilter.type = 'lowpass';
+    braamFilter.Q.setValueAtTime(2, now);
+    braamFilter.frequency.setValueAtTime(3000, now);
+    braamFilter.frequency.exponentialRampToValueAtTime(80, now + 1.8);
+
+    const braamGain = ctx.createGain();
+    braamGain.gain.setValueAtTime(0.8, now);
+    braamGain.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
+
+    const detuneOffsets = [-30, -20, -10, 0, 10, 20, 30];
+    const baseFreq = 41.20; 
+
+    detuneOffsets.forEach(detune => {
+        const osc = ctx.createOscillator();
+        osc.type = 'sawtooth';
+        osc.frequency.value = baseFreq;
+        osc.detune.value = detune;
+        osc.connect(braamFilter);
+        osc.start(now);
+        osc.stop(now + 2.0);
+    });
+
+    braamFilter.connect(braamGain);
+    braamGain.connect(distortion); 
+}
+
+let atmosphericMotes = [];
+const cvs = document.getElementById('cinemaCanvas');
+const cxx = cvs.getContext('2d');
+
+function configureCanvasBounds() {
+    cvs.width = window.innerWidth;
+    cvs.height = window.innerHeight;
+}
+window.addEventListener('resize', configureCanvasBounds);
+configureCanvasBounds();
+
+for (let i = 0; i < 45; i++) {
+    atmosphericMotes.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        radius: Math.random() * 2.5 + 0.5,
+        velocityStyleY: -(Math.random() * 0.3 + 0.1),
+        velocityStyleX: (Math.random() - 0.5) * 0.15,
+        opacity: Math.random() * 0.5 + 0.1
+    });
+}
+
+function processRenderEngineLoop(flareIntensity, lensY) {
+    cxx.clearRect(0, 0, cvs.width, cvs.height);
+
+    cxx.save();
+    for (let mote of atmosphericMotes) {
+        mote.y += mote.velocityStyleY;
+        mote.x += mote.velocityStyleX;
+        if (mote.y < 0) mote.y = cvs.height;
+        if (mote.x < 0 || mote.x > cvs.width) mote.x = Math.random() * cvs.width;
+        cxx.beginPath();
+        cxx.arc(mote.x, mote.y, mote.radius, 0, Math.PI * 2);
+        cxx.fillStyle = `rgba(255, 255, 255, ${mote.opacity})`;
+        cxx.shadowBlur = 8;
+        cxx.shadowColor = '#ffffff';
+        cxx.fill();
+    }
+    cxx.restore();
+
+    if (flareIntensity > 0) {
+        cxx.save();
+        cxx.globalCompositeOperation = 'screen';
+        
+        const cardBox = card.getBoundingClientRect();
+        const centerX = cardBox.left + cardBox.width / 2;
+
+        let streakGradient = cxx.createLinearGradient(0, lensY, cvs.width, lensY);
+        streakGradient.addColorStop(0, 'rgba(0, 80, 255, 0)');
+        streakGradient.addColorStop(0.3, 'rgba(0, 110, 255, 0.25)');
+        streakGradient.addColorStop(0.46, 'rgba(0, 190, 255, 0.85)');
+        streakGradient.addColorStop(0.5, `rgba(255, 255, 255, ${flareIntensity})`);
+        streakGradient.addColorStop(0.54, 'rgba(0, 190, 255, 0.85)');
+        streakGradient.addColorStop(0.7, 'rgba(0, 110, 255, 0.25)');
+        streakGradient.addColorStop(1, 'rgba(0, 80, 255, 0)');
+
+        cxx.fillStyle = streakGradient;
+        cxx.fillRect(0, lensY - (22 * flareIntensity), cvs.width, 44 * flareIntensity);
+
+        let radialGlow = cxx.createRadialGradient(centerX, lensY, 0, centerX, lensY, 220 * flareIntensity);
+        radialGlow.addColorStop(0, `rgba(255, 255, 255, ${flareIntensity})`);
+        radialGlow.addColorStop(0.25, 'rgba(0, 160, 255, 0.45)');
+        radialGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        
+        cxx.fillStyle = radialGlow;
+        cxx.beginPath();
+        cxx.arc(centerX, lensY, 220 * flareIntensity, 0, Math.PI * 2);
+        cxx.fill();
+        cxx.restore();
+    }
+}
+
+function executeCinematicSequence() {
+    if (cinematicEffectActive) return false;
+    cinematicEffectActive = true;
+
+    document.body.classList.add('cinematic-active');
+    triggerCinematicRiser();
+
+    const sequenceStartTime = performance.now();
+    const timelineApex = 1400;
+    
+    const cardBox = card.getBoundingClientRect();
+    const lensTargetY = cardBox.top + cardBox.height / 2;
+
+    const timelineEngine = (now) => {
+        const elapsed = now - sequenceStartTime;
+        let activeFlare = 0;
+
+        if (elapsed < timelineApex) {
+            const progressRatio = elapsed / timelineApex;
+            setThunderButtonState('cine-build', `INITIALIZING [${Math.floor(progressRatio * 100)}%]`);
+            shakeIntensity = progressRatio * 2.5;
+            
+            if (elapsed > timelineApex - 250) {
+                activeFlare = (elapsed - (timelineApex - 250)) / 250;
+            }
+            
+            processRenderEngineLoop(activeFlare, lensTargetY);
+            requestAnimationFrame(timelineEngine);
+        } else {
+            cutCinematicRiser();
+            playCinematicBraamBlast();
+            
+            document.body.classList.remove('cinematic-active');
+            document.body.classList.add('cinematic-impact');
+            setThunderButtonState('cine-flash-impact', 'PROTOCOL_SECURED');
+
+            shakeIntensity = 28; 
+            const flashNode = document.getElementById('filmFlash');
+            flashNode.style.transition = 'none';
+            flashNode.style.opacity = '0.9';
+            
+            setTimeout(() => {
+                flashNode.style.transition = 'opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1)';
+                flashNode.style.opacity = '0';
+                document.body.classList.remove('cinematic-impact');
+            }, 50);
+
+            let flashDiminishStart = performance.now();
+            const coolDownEngine = (coolDownNow) => {
+                const coolDownElapsed = coolDownNow - flashDiminishStart;
+                if (coolDownElapsed < 1200) {
+                    const decayFactor = 1 - (coolDownElapsed / 1200);
+                    processRenderEngineLoop(decayFactor * 1.2, lensTargetY);
+                    requestAnimationFrame(coolDownEngine);
+                } else {
+                    processRenderEngineLoop(0, lensTargetY);
+                    dlBtn.classList.remove('cine-build', 'cine-flash-impact');
+                    dlBtn.innerHTML = '<span>Generate Config</span><span>→</span>';
+                    cinematicEffectActive = false;
+                }
+            };
+            requestAnimationFrame(coolDownEngine);
+        }
+    };
+
+    requestAnimationFrame(timelineEngine);
+    return true;
+}
+
+function setThunderButtonState(className, label) {
+    dlBtn.classList.remove('cine-build', 'cine-flash-impact');
+    if (className) dlBtn.classList.add(className);
+    dlBtn.innerHTML = `<span>${label}</span><span>→</span>`;
+}
+
+input.addEventListener('input', () => {
+    const val = input.value.trim();
+    
+    if (val.length > 1 && /^\d+$/.test(val)) {
+        currentId = val;
+        hud.classList.add('active');
+        dlBtn.disabled = false;
+        gName.innerText = "APPID_" + val;
+        gStatus.innerText = "LOCAL_CACHE_HIT";
+        gThumb.src = `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${val}/header.jpg`;
+        gThumb.style.display = "block";
+        document.getElementById('steamDbBtn').href = `https://www.steamdb.info/app/${val}/`;
+        fetchName(val);
+    } else {
+        hud.classList.remove('active');
+        dlBtn.disabled = true;
+        currentId = null;
+        document.getElementById('steamDbBtn').href = 'https://www.steamdb.info/';
+    }
+});
+
+async function fetchName(id) {
+    try {
+        const res = await fetch(`https://store.steampowered.com/api/appdetails?appids=${id}&filters=basic`);
+        const json = await res.json();
+        if (id === currentId && json[id]?.success) {
+            const data = json[id].data;
+            currentName = data.name.toUpperCase();
+            gName.innerText = currentName;
+            gStatus.innerText = "PROTOCOL_SYNC_OK";
+            if(data.header_image) gThumb.src = data.header_image;
+        }
+    } catch (e) {
+        if (id === currentId) gStatus.innerText = "OFFLINE_MODE_ACTIVE";
+    }
+}
+
+function executeDownload() {
+    if (!currentId || currentId.length < 2 || isNaN(parseInt(currentId))) {
+        dlBtn.classList.add('shake');
+        setTimeout(() => dlBtn.classList.remove('shake'), 500);
+        gStatus.innerText = "INVALID_APPID";
+        return;
+    }
+
+    if (!executeCinematicSequence()) return;
+    
+    const appIdNum = parseInt(currentId);
+    const depotId = appIdNum + 1;
+    
+    function generateEncryptedKey(id) {
+        const seed = (id * 0x9e3779b97f4a7c15) & 0xFFFFFFFFFFFFFFFF;
+        let hex = Math.abs(seed).toString(16);
+        while (hex.length < 32) hex = '0' + hex;
+        let key = hex + hex.split('').reverse().join('');
+        if (key.length > 64) key = key.slice(0, 64);
+        if (key.length < 64) key = key.padEnd(64, 'f');
+        return key;
+    }
+    
+    function generateManifestId(id) {
+        const manifestNum = (id * 7124452876391) % 9999999999999999999;
+        let result = manifestNum.toString();
+        while (result.length < 19) result = '1' + result;
+        if (result.length > 19) result = result.slice(0, 19);
+        return result;
+    }
+    
+    const encryptedKey = generateEncryptedKey(appIdNum);
+    const manifestId = generateManifestId(appIdNum);
+    
+    const luaContent = `-- STEAMTOOLS SHADOW PROTOCOL CONFIG
+-- Game: ${currentName !== "GAME_CONFIG" ? currentName : "APPID_" + currentId}
+-- Generated: ${new Date().toLocaleString()}
+
+addappid(${currentId})
+addappid(${depotId}, 1, "${encryptedKey}")
+setManifestid(${depotId}, "${manifestId}", 0)`;
+    
+    try {
+        const blob = new Blob([luaContent], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${currentId}.lua`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        const ach = document.getElementById('achievement');
+        setTimeout(() => { ach.classList.add('show'); }, 1400);
+        setTimeout(() => ach.classList.remove('show'), 5400);
+        
+        const originalStatus = gStatus.innerText;
+        setTimeout(() => { gStatus.innerText = "CONFIG_EXPORTED"; }, 1400);
+        setTimeout(() => {
+            if (currentId && gStatus.innerText === "CONFIG_EXPORTED") {
+                gStatus.innerText = originalStatus;
+            }
+        }, 4000);
+    } catch (error) {
+        gStatus.innerText = "DOWNLOAD_ERROR";
+    }
+}
+
+document.getElementById('dlBtn').addEventListener('click', executeDownload);
+
+window.addEventListener('mousemove', (e) => {
+    tiltX = (window.innerWidth / 2 - e.clientX) / 35;
+    tiltY = (window.innerHeight / 2 - e.clientY) / 35;
+});
+
+function spatialMatrixEngine() {
+    let currentShakeX = 0;
+    let currentShakeY = 0;
+
+    if (shakeIntensity > 0) {
+        currentShakeX = (Math.random() - 0.5) * shakeIntensity;
+        currentShakeY = (Math.random() - 0.5) * shakeIntensity;
+        shakeIntensity *= 0.92; 
+        if (shakeIntensity < 0.05) shakeIntensity = 0;
+    }
+
+    card.style.transform = `rotateY(${tiltX + currentShakeX}deg) rotateX(${-tiltY + currentShakeY}deg) scale(${1 + (shakeIntensity * 0.0015)})`;
+    requestAnimationFrame(spatialMatrixEngine);
+}
+requestAnimationFrame(spatialMatrixEngine);
+
+function backgroundCoreMoteAnimation() {
+    if (!cinematicEffectActive) {
+        processRenderEngineLoop(0, 0);
+    }
+    requestAnimationFrame(backgroundCoreMoteAnimation);
+}
+requestAnimationFrame(backgroundCoreMoteAnimation);
+
+(function(){
+    const scvs = document.getElementById('starsCanvas');
+    const sctx = scvs.getContext('2d');
+    let stars = [];
+
+    function resize(){
+        scvs.width  = window.innerWidth;
+        scvs.height = window.innerHeight;
+        buildStars();
+    }
+
+    function buildStars(){
+        stars = [];
+        const n = Math.floor((scvs.width * scvs.height) / 3800);
+        for(let i = 0; i < n; i++){
+            stars.push({
+                x: Math.random() * scvs.width,
+                y: Math.random() * scvs.height,
+                r: Math.random() * 1.3 + 0.15,
+                base: Math.random() * 0.65 + 0.1,
+                speed: Math.random() * 0.006 + 0.001,
+                phase: Math.random() * Math.PI * 2
+            });
+        }
+    }
+
+    let t = 0;
+    function draw(){
+        sctx.clearRect(0, 0, scvs.width, scvs.height);
+        t++;
+        for(const s of stars){
+            const a = s.base * (0.65 + 0.35 * Math.sin(t * s.speed + s.phase));
+            sctx.beginPath();
+            sctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            sctx.fillStyle = `rgba(255,255,255,${a})`;
+            sctx.fill();
+        }
+        requestAnimationFrame(draw);
+    }
+
+    resize();
+    draw();
+    window.addEventListener('resize', resize);
+})();
+
+const runtimeStyle = document.createElement('style');
+runtimeStyle.textContent = `
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-6px); }
+        75% { transform: translateX(6px); }
+    }
+    .shake { animation: shake 0.25s ease-in-out 2; }
+`;
+document.head.appendChild(runtimeStyle);
+</script>
+</body>
+</html>
