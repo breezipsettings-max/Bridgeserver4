@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Steam AppID Lua Generator | SteamTools Helper</title>
+<title>Steam AppID Lua & Manifest Generator | SteamTools Helper</title>
 <meta name="google-site-verification" content="H5VxEGD785KDLpVVjR7l3ORyS9Obix08WUj7eoW9LZs">
-<meta name="description" content="Generate SteamTools Lua config files from a Steam AppID. Steam header preview, and local .lua export.">
-<meta name="keywords" content="Steam AppID Lua generator, SteamTools Lua generator, Steam manifest generator, SteamDB AppID lookup, Steam config generator, appmanifest helper, Lua config download, Steam depot manifest tool">
+<meta name="description" content="Generate SteamTools Lua config files and manifests from a Steam AppID into a clean ZIP archive.">
+<meta name="keywords" content="Steam AppID Lua generator, SteamTools Lua generator, Steam manifest generator, SteamDB AppID lookup, Steam config generator, appmanifest helper">
 <meta name="author" content="manifest lua generator">
 <meta name="publisher" content="manifest lua generator">
 <meta name="application-name" content="steam tools lua generator">
@@ -26,14 +26,17 @@
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta property="og:site_name" content="SteamTools Shadow Protocol">
-<meta property="og:title" content="Steam AppID Lua Generator - SteamTools Config Helper">
-<meta property="og:description" content="Enter a Steam AppID, preview Steam game metadata, open SteamDB, and export a local SteamTools-style Lua config file from one fast web page.">
+<meta property="og:title" content="Steam AppID Lua & Manifest Generator">
+<meta property="og:description" content="Enter a Steam AppID, preview metadata, and export a ZIP package containing your .lua config and .manifest file.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="/">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Steam AppID Lua Generator">
-<meta name="twitter:description" content="Fast Steam AppID lookup and local SteamTools Lua config export in a single-page utility.">
+<meta name="twitter:title" content="Steam AppID Lua & Manifest Generator">
+<meta name="twitter:description" content="Fast Steam AppID lookup and local SteamTools Lua/Manifest ZIP export.">
+
+<!-- JSZip CDN for packaging .lua and .manifest into a ZIP archive -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 <!-- Microsoft Clarity Connected Tracking Link Kept -->
 <script type="text/javascript">
@@ -44,83 +47,6 @@
     })(window, document, "clarity", "script", "yn4akradt0");
 </script>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebSite",
-      "@id": "/#website",
-      "url": "/",
-      "name": "Steam AppID Lua Generator",
-      "description": "Single-page Steam AppID lookup and Lua config generator.",
-      "inLanguage": "en-US"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "@id": "/#app",
-      "name": "Steam AppID Lua Generator",
-      "url": "/",
-      "description": "A browser-based utility that accepts a Steam AppID, previews Steam game metadata, and exports a local Lua configuration file.",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "Windows, Linux, macOS",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "/#faq",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What does the Steam AppID Lua Generator do?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "It turns a numeric Steam AppID into a downloadable Lua configuration file and shows a Steam game preview when metadata is available."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Do I need to install software to use it?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. The generator runs in the browser as a single-page web tool and exports the Lua file locally."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I open the matching SteamDB page?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. After entering an AppID, the SteamDB shortcut updates to the corresponding SteamDB app page."
-          }
-        }
-      ]
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": "/#breadcrumb",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Steam AppID Lua Generator",
-          "item": "/"
-        }
-      ]
-    }
-  ]
-}
-</script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 
 <style>
@@ -233,7 +159,6 @@
         position: relative; z-index: 10; transition: transform 0.1s linear, border-color 0.4s var(--ease);
     }
 
-    /* Visible content card style for dynamic sub-pages */
     .card.info-card {
         width: 500px;
         max-height: 80vh;
@@ -342,7 +267,6 @@
         transform: scale(1.05);
     }
 
-    /* Right-side vertical navigation stack */
     .nav-stack {
         position: fixed;
         top: 58px;
@@ -400,19 +324,9 @@
 </head>
 <body>
 
-<main class="seo-content" aria-label="Steam AppID Lua generator summary">
-    <h1>Steam AppID Lua Generator</h1>
-    <p>SteamTools Shadow Protocol is a browser-based AppID helper that generates a local Lua configuration file from a numeric Steam AppID.</p>
-    <p>The page supports Steam game header previews, direct SteamDB app lookup, and a fast local export workflow for users who need a SteamTools-style config helper.</p>
-    <section aria-label="Common questions">
-        <h2>Steam AppID Lua Generator FAQ</h2>
-        <h3>What is a Steam AppID?</h3>
-        <p>A Steam AppID is the numeric identifier used by Steam to reference a game, tool, demo, or application.</p>
-        <h3>What file does this tool export?</h3>
-        <p>The tool exports a local .lua configuration file based on the AppID entered in the input field.</p>
-        <h3>Does this page link to SteamDB?</h3>
-        <p>Yes. The SteamDB button updates to the matching app page when a valid AppID is entered.</p>
-    </section>
+<main class="seo-content" aria-label="Steam AppID Lua and Manifest generator summary">
+    <h1>Steam AppID Lua & Manifest Generator</h1>
+    <p>SteamTools Shadow Protocol is a browser-based AppID helper that generates a local Lua configuration file and manifest package.</p>
 </main>
 
 <div id="cursor"></div>
@@ -429,7 +343,6 @@
     <div class="nebula-band nebula-band-2"></div>
 </div>
 
-<!-- Vertical right-side button stack (SteamDB stays at the top of the list) -->
 <div class="nav-stack">
     <a id="steamDbBtn" href="https://www.steamdb.info/" target="_blank" rel="noopener" class="steamdb-btn">
         <span class="sdb-pulse"></span>
@@ -443,26 +356,18 @@
         <span class="sdb-pulse"></span>
         <span>App Spec</span>
     </a>
-    <a href="/website" class="steamdb-btn">
-        <span class="sdb-pulse"></span>
-        <span>Website Info</span>
-    </a>
-    <a href="/breadcrumb" class="steamdb-btn">
-        <span class="sdb-pulse"></span>
-        <span>Breadcrumbs</span>
-    </a>
 </div>
 
 <nav class="ticker">
     <div class="ticker-content">
-        &nbsp; [SYSTEM_ONLINE] &nbsp; • &nbsp; CDN_HOTLINK: ENABLED &nbsp; • &nbsp; REALTIME_SYNC: ACTIVE &nbsp; • &nbsp; STATUS: AUTHORITATIVE &nbsp; • &nbsp;
+        &nbsp; [SYSTEM_ONLINE] &nbsp; • &nbsp; MANIFEST_ZIP_EXPORT: ENABLED &nbsp; • &nbsp; STATUS: AUTHORITATIVE &nbsp; • &nbsp;
     </div>
 </nav>
 
 <div class="container">
     <div class="bg-lines"></div>
     <article class="card" id="mainCard">
-        <header><h2>Lua_Generator</h2></header>
+        <header><h2>Manifest_Generator</h2></header>
         <input type="number" class="input-field" id="appId" placeholder="APP_ID" autocomplete="off">
         <div id="gameHud">
             <img id="gThumb" src="" alt="Thumbnail" style="display:none">
@@ -471,7 +376,7 @@
             <div class="hud-value" style="font-size:10px; color:var(--accent); margin-top:4px" id="gStatus">LOCAL_SYNC</div>
         </div>
         <button class="btn" id="dlBtn" disabled>
-            <span>Generate Config</span><span>→</span>
+            <span>Generate ZIP Package</span><span>→</span>
         </button>
     </article>
 </div>
@@ -480,19 +385,11 @@
     <div class="ach-icon">!</div>
     <div class="ach-text">
         <div style="color:var(--accent); font-size:10px; font-weight:800; text-transform:uppercase;">Achievement Unlocked</div>
-        <div style="font-weight:600; font-size:14px;">Config Master</div>
+        <div style="font-weight:600; font-size:14px;">Manifest Master</div>
     </div>
 </div>
 
-<section>
-    <div class="social-links" style="margin-top: 30px; margin-bottom: 30px;">
-        <a href="https://twitter.com/" target="_blank">Share on Twitter</a>
-        <a href="https://facebook.com/" target="_blank">Share on Facebook</a>
-    </div>
-</section>
-
 <script>
-// Dynamic path router to render visible content based on the URL path (/faq, /app, /website, /breadcrumb)
 window.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
     const card = document.getElementById('mainCard');
@@ -502,43 +399,8 @@ window.addEventListener('DOMContentLoaded', () => {
         card.className = 'card info-card';
         card.innerHTML = `
             <header><h2>Protocol FAQ</h2></header>
-            <h3>What does the Steam AppID Lua Generator do?</h3>
-            <p>It turns a numeric Steam AppID into a downloadable Lua configuration file and shows a Steam game preview when metadata is available.</p>
-            <h3>Do I need to install software to use it?</h3>
-            <p>No. The generator runs in the browser as a single-page web tool and exports the Lua file locally.</p>
-            <h3>Can I open the matching SteamDB page?</h3>
-            <p>Yes. After entering an AppID, the SteamDB shortcut updates to the corresponding SteamDB app page.</p>
-            <a href="/" class="back-btn">← Back to Generator</a>
-        `;
-    } else if (path === '/app') {
-        card.className = 'card info-card';
-        card.innerHTML = `
-            <header><h2>Software Application</h2></header>
-            <h3>Steam AppID Lua Generator</h3>
-            <p><strong>Description:</strong> A browser-based utility that accepts a Steam AppID, previews Steam game metadata, and exports a local Lua configuration file.</p>
-            <p><strong>Category:</strong> DeveloperApplication</p>
-            <p><strong>Operating System:</strong> Windows, Linux, macOS</p>
-            <p><strong>Price:</strong> Free (0 USD)</p>
-            <a href="/" class="back-btn">← Back to Generator</a>
-        `;
-    } else if (path === '/website') {
-        card.className = 'card info-card';
-        card.innerHTML = `
-            <header><h2>WebSite Protocol</h2></header>
-            <h3>Steam AppID Lua Generator Portal</h3>
-            <p>Single-page Steam AppID lookup and Lua config generator active on authoritative CDN nodes.</p>
-            <p><strong>Language:</strong> English (en-US)</p>
-            <a href="/" class="back-btn">← Back to Generator</a>
-        `;
-    } else if (path === '/breadcrumb') {
-        card.className = 'card info-card';
-        card.innerHTML = `
-            <header><h2>Breadcrumb Navigator</h2></header>
-            <h3>Navigation Trail</h3>
-            <ul>
-                <li>Position 1: Home (/)</li>
-                <li>Position 2: Steam AppID Lua Generator (/)</li>
-            </ul>
+            <h3>What does the Generator do?</h3>
+            <p>It turns a numeric Steam AppID into a ZIP file containing both the <code>.lua</code> configuration and the <code>.manifest</code> file.</p>
             <a href="/" class="back-btn">← Back to Generator</a>
         `;
     }
@@ -905,7 +767,7 @@ function executeCinematicSequence() {
                 } else {
                     processRenderEngineLoop(0, lensTargetY);
                     dlBtn.classList.remove('cine-build', 'cine-flash-impact');
-                    dlBtn.innerHTML = '<span>Generate Config</span><span>→</span>';
+                    dlBtn.innerHTML = '<span>Generate ZIP Package</span><span>→</span>';
                     cinematicEffectActive = false;
                 }
             };
@@ -962,7 +824,7 @@ async function fetchName(id) {
     }
 }
 
-function executeDownload() {
+async function executeDownload() {
     if (!currentId || currentId.length < 2 || isNaN(parseInt(currentId))) {
         dlBtn.classList.add('shake');
         setTimeout(() => dlBtn.classList.remove('shake'), 500);
@@ -1003,13 +865,26 @@ function executeDownload() {
 addappid(${currentId})
 addappid(${depotId}, 1, "${encryptedKey}")
 setManifestid(${depotId}, "${manifestId}", 0)`;
+
+    const manifestContent = `"SteamManifest"
+{
+    "AppID"        "${currentId}"
+    "DepotID"      "${depotId}"
+    "ManifestID"   "${manifestId}"
+    "EncryptedKey" "${encryptedKey}"
+    "Generated"    "${new Date().toISOString()}"
+}`;
     
     try {
-        const blob = new Blob([luaContent], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
+        const zip = new JSZip();
+        zip.file(`${currentId}.lua`, luaContent);
+        zip.file(`${currentId}.manifest`, manifestContent);
+
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(zipBlob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${currentId}.lua`;
+        a.download = `${currentId}.zip`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -1020,9 +895,9 @@ setManifestid(${depotId}, "${manifestId}", 0)`;
         setTimeout(() => ach.classList.remove('show'), 5400);
         
         const originalStatus = gStatus.innerText;
-        setTimeout(() => { gStatus.innerText = "CONFIG_EXPORTED"; }, 1400);
+        setTimeout(() => { gStatus.innerText = "ZIP_PACKAGE_EXPORTED"; }, 1400);
         setTimeout(() => {
-            if (currentId && gStatus.innerText === "CONFIG_EXPORTED") {
+            if (currentId && gStatus.innerText === "ZIP_PACKAGE_EXPORTED") {
                 gStatus.innerText = originalStatus;
             }
         }, 4000);
